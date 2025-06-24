@@ -39,7 +39,7 @@ export async function getDocument<
   const data = snapshot.data() as T;
   set<T>(cacheKey, data, options.persistent);
 
-  logger.debug(`[Firestore] Loaded: ${cacheKey}`);
+  logger.info(`[firestore] Loaded: ${cacheKey}`);
   return data;
 }
 

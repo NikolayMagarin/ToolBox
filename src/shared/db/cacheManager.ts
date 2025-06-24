@@ -5,7 +5,7 @@ type CacheEntry<T> = {
 };
 
 const TTL = 1000 * 60 * 10; // 10 minutes
-const CLEANUP_INTERVAL = 1000 * 60 * 5; // every 5 minutes
+const CLEANUP_INTERVAL = 1000 * 60 * 5; // every minute
 const cache = new Map<string, CacheEntry<any>>();
 
 export function set<T>(key: string, data: T, persistent = false): void {
@@ -36,4 +36,4 @@ export function cleanup(): void {
   }
 }
 
-setInterval(cleanup, CLEANUP_INTERVAL); // every minute
+setInterval(cleanup, CLEANUP_INTERVAL);

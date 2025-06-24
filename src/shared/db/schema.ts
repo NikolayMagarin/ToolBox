@@ -2,17 +2,21 @@ const collections = ['apiKeys'] as const;
 
 export interface Schema extends DataBaseSchema {
   apiKeys: {
-    docId: ApiKeyHash;
+    docId: ApiKey;
     data: {
       createdAt: number;
+      lastUsedAt: number;
       isActive: boolean;
-    } & Record<`${ApiServiceName}Quota`, ApiServiceQuota>;
+    } & Record<ApiServiceQuotaName, ApiServiceQuota>;
   };
 }
 
-type ApiKeyHash = string;
-type ApiServiceName = 'aiProxy' | 'linkShortener';
-type ApiServiceQuota = { dailyLimit: number; usedToday: number };
+export const servicesNames = ['admins', 'aiProxy', 'linkShortener'] as const;
+
+export type ApiKey = string;
+export type ApiServiceName = (typeof servicesNames)[number];
+export type ApiServiceQuota = { dailyLimit: number; usedToday: number };
+export type ApiServiceQuotaName = `${ApiServiceName}Quota`;
 
 ///////////
 
