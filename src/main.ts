@@ -7,6 +7,8 @@ import { ApiError } from './shared/ApiError';
 
 const app = express();
 
+app.get('/ping', (req, res) => res.status(200).send('pong'));
+
 app.use(cors());
 app.use('/:service/api', apiKeysMiddleware);
 app.use(express.json());
