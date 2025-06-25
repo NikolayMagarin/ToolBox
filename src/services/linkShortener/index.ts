@@ -60,22 +60,23 @@ async function saveMetaTags(originalUrl: string, linkId: string) {
   if (!doc.exists) {
     return;
   }
+  try {
+    const { data } = await axios.get(originalUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; LinkShortener/1.0)',
+      },
+    });
 
-  const { data } = await axios.get(originalUrl, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; LinkShortener/1.0)',
-    },
-  });
+    const $ = cheerio.load(data);
 
-  const $ = cheerio.load(data);
-
-  doc.ref.update({
-    metaTags: {
-      title: $('title').text() || originalUrl,
-      description: $('meta[name="description"]').attr('content') || '',
-      image: $('meta[property="og:image"]').attr('content') || '',
-    },
-  });
+    doc.ref.update({
+      metaTags: {
+        title: $('title').text() || originalUrl,
+        description: $('meta[name="description"]').attr('content') || '',
+        image: $('meta[property="og:image"]').attr('content') || '',
+      },
+    });
+  } catch {}
 }
 
 router.get('/linkShortener/api/cleanup-expired', async (req, res) => {
