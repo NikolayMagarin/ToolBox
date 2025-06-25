@@ -46,11 +46,37 @@ router.post(
       );
 
       res.status(200).json({ shortUrl: `${config.origin}/l/${linkId}` });
+
+      saveMetaTags(req.body.originalUrl, linkId);
     }
   }
 );
 
 const db = admin.firestore();
+
+async function saveMetaTags(originalUrl: string, linkId: string) {
+  const doc = await db.collection('shortLinks').doc(linkId).get();
+
+  if (!doc.exists) {
+    return;
+  }
+
+  const { data } = await axios.get(originalUrl, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; LinkShortener/1.0)',
+    },
+  });
+
+  const $ = cheerio.load(data);
+
+  doc.ref.update({
+    metaTags: {
+      title: $('title').text() || originalUrl,
+      description: $('meta[name="description"]').attr('content') || '',
+      image: $('meta[property="og:image"]').attr('content') || '',
+    },
+  });
+}
 
 router.get('/linkShortener/api/cleanup-expired', async (req, res) => {
   const now = new Date();
@@ -76,24 +102,13 @@ router.get('/l/:linkId', async (req, res) => {
   }
 
   const originalUrl: string = doc.get('originalUrl');
+  const metaTags = (doc.get('metaTags') || {}) as {
+    title: string;
+    description: string;
+    image: string;
+  };
 
-  try {
-    const { data } = await axios.get(originalUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; LinkShortener/1.0)',
-      },
-    });
-
-    const $ = cheerio.load(data);
-
-    const metaTags = {
-      title: $('title').text() || originalUrl,
-      description: $('meta[name="description"]').attr('content') || '',
-      image: $('meta[property="og:image"]').attr('content') || '',
-      url: originalUrl,
-    };
-
-    const html = `
+  const html = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -102,7 +117,7 @@ router.get('/l/:linkId', async (req, res) => {
           <meta property="og:title" content="${metaTags.title}">
           <meta property="og:description" content="${metaTags.description}">
           <meta property="og:image" content="${metaTags.image}">
-          <meta property="og:url" content="${metaTags.url}">
+          <meta property="og:url" content="${originalUrl}">
           <meta name="twitter:card" content="summary_large_image">
           <meta http-equiv="refresh" content="0;url=${originalUrl}">
         </head>
@@ -114,9 +129,5 @@ router.get('/l/:linkId', async (req, res) => {
       </html>
     `;
 
-    res.send(html);
-  } catch (error) {
-    logger.error('[link-shortener] ' + (error as any)?.message, error);
-    res.redirect(originalUrl || '/');
-  }
+  res.send(html);
 });
