@@ -3,6 +3,7 @@ import cors from 'cors';
 import { apiKeysMiddleware } from './shared/apiKeys';
 import { logger } from './shared/logger';
 import { router as adminRouter } from './services/admin';
+import { router as linksRouter } from './services/linkShortener';
 import { ApiError } from './shared/ApiError';
 
 const app = express();
@@ -14,6 +15,7 @@ app.use('/:service/api', apiKeysMiddleware);
 app.use(express.json());
 
 app.use(adminRouter);
+app.use(linksRouter);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   if (error instanceof ApiError) {

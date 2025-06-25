@@ -127,3 +127,6 @@ dist
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# developers notes
+notes

@@ -14,6 +14,7 @@ interface Config {
   firebaseClientEmail: string;
   firebasePrivateKey: string;
   firebaseProjectId: string;
+  origin: string;
 }
 
 export const config: Config = {
@@ -21,4 +22,5 @@ export const config: Config = {
   firebaseClientEmail: getEnvValue('FIREBASE_CLIENT_EMAIL'),
   firebasePrivateKey: getEnvValue('FIREBASE_PRIVATE_KEY'),
   firebaseProjectId: getEnvValue('FIREBASE_PROJECT_ID'),
+  origin: getEnvValue('ORIGIN'),
 };
