@@ -14,6 +14,7 @@ interface Config {
   firebaseClientEmail: string;
   firebasePrivateKey: string;
   firebaseProjectId: string;
+  groqApiKey: string;
   origin: string;
 }
 
@@ -22,5 +23,6 @@ export const config: Config = {
   firebaseClientEmail: getEnvValue('FIREBASE_CLIENT_EMAIL'),
   firebasePrivateKey: getEnvValue('FIREBASE_PRIVATE_KEY'),
   firebaseProjectId: getEnvValue('FIREBASE_PROJECT_ID'),
+  groqApiKey: getEnvValue('GROQ_API_KEY'),
   origin: getEnvValue('ORIGIN'),
 };

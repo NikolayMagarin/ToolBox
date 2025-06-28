@@ -5,7 +5,6 @@ import { config } from '../../config';
 import { validate } from '../../shared/reqValidate';
 import { generateShortUrlId } from './links';
 import admin from 'firebase-admin';
-import { logger } from '../../shared/logger';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 

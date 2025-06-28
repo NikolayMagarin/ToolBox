@@ -40,7 +40,7 @@ setInterval(async () => {
 
   try {
     await batch.commit();
-    logger.info(`[firestore] ${operations.length} writes committed`);
+    // logger.info(`[firestore] ${operations.length} writes committed`);
   } catch (err) {
     logger.error('[firestore] Batch write failed', err);
   }
