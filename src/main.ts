@@ -5,6 +5,7 @@ import { logger } from './shared/logger';
 import { router as adminRouter } from './services/admin';
 import { router as linksRouter } from './services/linkShortener';
 import { router as aiProxyRouter } from './services/aiProxy';
+import { router as picTextRouter } from './services/textOnImage';
 import { ApiError } from './shared/ApiError';
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(adminRouter);
 app.use(linksRouter);
 app.use(aiProxyRouter);
+app.use(picTextRouter);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   if (error instanceof ApiError) {

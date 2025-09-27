@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text on image</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./range-sliders.css" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.2/jscolor.min.js"
+      integrity="sha512-qFhMEJrjI50TwLDGZ7Oi0ksTSWnFOqTNXhlqqUgWnE65S23rWUtQOv+tMNEybkMYSXKgAc3eg/SzkX+qrtJT/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <main>
+      <header class="header">
+        <h1>macheko.top/<br /><span class="accent">pictext</span></h1>
+        <p class="tagline">Add text to images</p>
+      </header>
+      <div class="input-area">
+        <div class="input-group">
+          <div class="image-dragBox">
+            Загрузить изображение
+            <input type="file" accept="image/*" id="input-image" />
+          </div>
+        </div>
+        <div class="input-group">
+          <textarea
+            class="input-text"
+            name="text"
+            placeholder="Введите текст"
+            id="input-text"
+          ></textarea>
+        </div>
+        <div class="input-group text-appearance-input-group">
+          <div class="text-align-input-group">
+            <input
+              type="radio"
+              id="text-align-left"
+              name="text-align"
+              value="left"
+            />
+            <label for="text-align-left"
+              ><img src="assets/align-left.svg"
+            /></label>
+            <input
+              type="radio"
+              id="text-align-center"
+              name="text-align"
+              value="center"
+              checked
+            />
+            <label for="text-align-center"
+              ><img src="assets/align-center.svg"
+            /></label>
+            <input
+              type="radio"
+              id="text-align-right"
+              name="text-align"
+              value="right"
+            />
+            <label for="text-align-right"
+              ><img src="assets/align-right.svg"
+            /></label>
+            <input
+              type="radio"
+              id="text-align-justify"
+              name="text-align"
+              value="justify"
+            />
+            <label for="text-align-justify"
+              ><img src="assets/align-justify.svg"
+            /></label>
+          </div>
+          <div class="text-style-controls">
+            <label>
+              <input
+                type="checkbox"
+                name="bold-text-checkbox"
+                id="bold-text-checkbox"
+              /><b>B</b></label
+            >
+            <label>
+              <input
+                type="checkbox"
+                name="italic-text-checkbox"
+                id="italic-text-checkbox"
+              /><i>I</i></label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="underline-text"
+                id="underline-text-checkbox"
+              /><u>U</u></label
+            >
+            <label>
+              <input
+                type="checkbox"
+                name="strikethrough-text-checkbox"
+                id="strikethrough-text-checkbox"
+              /><s>S</s></label
+            >
+          </div>
+        </div>
+        <div class="input-group text-appearance-input-group">
+          <input id="color-input" class="color-input" />
+          <select id="font-family-select" class="font-family-select">
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="Verdana, sans-serif">Verdana</option>
+            <option value="Tahoma, sans-serif">Tahoma</option>
+            <option value="Trebuchet MS, sans-serif">Trebuchet MS</option>
+            <option value="Times New Roman, serif">Times New Roman</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="Garamond, serif">Garamond</option>
+            <option value="Courier New, monospace">Courier New</option>
+            <option value="Brush Script MT, cursive">Brush Script MT</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="text-size">Размер шрифта</label>
+          <div class="input-wrapper">
+            <input
+              name="text-size"
+              id="text-size-input"
+              class="win10-thumb"
+              type="range"
+              min="1"
+              max="64"
+              value="24"
+              step="0.5"
+            />
+            <div
+              id="text-size-input-value"
+              class="input-value"
+              style="cursor: pointer"
+            >
+              24.0
+            </div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="text-line-height">Межстрочный интервал</label>
+          <div class="input-wrapper">
+            <input
+              name="text-line-height"
+              id="text-line-height-input"
+              class="win10-thumb"
+              type="range"
+              min="0.5"
+              max="3"
+              value="1"
+              step="0.05"
+            />
+            <div id="text-line-height-input-value" class="input-value">
+              1.00
+            </div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="text-box-size">Ширина текста %</label>
+          <div class="input-wrapper">
+            <input
+              name="text-box-size"
+              id="text-box-size-input"
+              class="win10-thumb"
+              type="range"
+              min="1"
+              max="100"
+              value="90"
+              step="1"
+            />
+            <div id="text-box-size-input-value" class="input-value">90</div>
+          </div>
+        </div>
+      </div>
+      <div id="hint" class="hint"></div>
+      <div id="preview-container" class="preview-container">
+        <div class="text-box-wrapper">
+          <div id="text-box" class="text-box"></div>
+        </div>
+        <img id="image" class="image" />
+      </div>
+      <button class="download-btn" id="download-btn">
+        Скачать изображение
+      </button>
+    </main>
+
+    <footer class="footer">
+      <p>© <span id="year"></span> Macheko. All rights reserved.</p>
+    </footer>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"
+      integrity="sha512-01CJ9/g7e8cUmY0DFTMcUw/ikS799FHiOA0eyHsUWfOetgbx/t6oV4otQ5zXKQyIrQGTHSmRVPIgrgLcZi/WMA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="main.js"></script>
+  </body>
+</html>
