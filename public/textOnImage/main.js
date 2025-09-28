@@ -312,7 +312,7 @@ function createTooltip(element, text) {
   tooltip.textContent = text;
 
   Object.assign(tooltip.style, {
-    position: 'fixed',
+    position: 'absolute',
     background: 'rgba(0, 0, 0, 0.9)',
     color: 'white',
     padding: '8px 12px',
