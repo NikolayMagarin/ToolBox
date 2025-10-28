@@ -7,10 +7,12 @@ import { router as linksRouter } from './services/linkShortener';
 import { router as aiProxyRouter } from './services/aiProxy';
 import { router as picTextRouter } from './services/textOnImage';
 import { ApiError } from './shared/ApiError';
+import { selfPing, selfPingRouter } from './shared/selfPing';
 
 const app = express();
 
 app.get('/ping', (req, res) => res.status(200).send('pong'));
+app.use(selfPingRouter);
 
 app.use(cors());
 app.use('/:service/api', apiKeysMiddleware);
@@ -35,4 +37,5 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 
 app.listen(80, () => {
   logger.info('[app] server started');
+  selfPing();
 });
