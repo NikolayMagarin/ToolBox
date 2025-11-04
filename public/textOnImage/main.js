@@ -1,3 +1,5 @@
+import { loadImageFromDB, saveImageToDB } from './imageStore.js';
+
 document.getElementById('year').textContent = new Date().getFullYear();
 
 const container = document.getElementById('preview-container');
@@ -64,6 +66,8 @@ inputImg.onchange = () => {
 
     reader.readAsDataURL(file);
   }
+
+  saveImageToDB(file).catch(console.error);
 };
 
 let tooltipLearned = false;
@@ -281,27 +285,45 @@ function loadSettings() {
   textBoxWidthInput.oninput();
 }
 
+function loadImage() {
+  return loadImageFromDB()
+    .then((image) => {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(image);
+      inputImg.files = dataTransfer.files;
+      inputImg.onchange();
+    })
+    .catch(console.error);
+}
+
 downloadBtn.onclick = () => {
   container.style.marginLeft = '0px';
   container.style.width = `${image.naturalWidth}px`;
   container.style.height = `${image.naturalHeight}px`;
   textBox.style.setProperty('--text-scale', '1');
 
-  domtoimage
-    .toJpeg(container)
-    .then(function (dataUrl) {
-      window.onresize();
+  setTimeout(() => {
+    domtoimage
+      .toJpeg(container)
+      .then(function (dataUrl) {
+        const anchorElement = document.createElement('a');
+        anchorElement.href = dataUrl;
+        anchorElement.download = inputImg?.files?.[0].name || 'image';
+        anchorElement.click();
 
-      const anchorElement = document.createElement('a');
-      anchorElement.href = dataUrl;
-      anchorElement.download = inputImg?.files?.[0].name || 'image';
-      anchorElement.click();
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
+        setTimeout(() => {
+          window.onresize();
+        }, 500);
+      })
+      .catch(function (error) {
+        window.onresize();
+
+        console.error(error);
+      });
+  }, 250);
 };
 
+loadImage();
 loadSettings();
 
 function createTooltip(element, text) {
@@ -355,7 +377,7 @@ function createTooltip(element, text) {
         if (tooltip.parentNode) {
           tooltip.parentNode.removeChild(tooltip);
         }
-        // Удаляем обработчики событий
+
         document.removeEventListener('click', hideOnClick);
         document.removeEventListener('keydown', hideOnEscape);
         clearTimeout(autoHideTimer);
